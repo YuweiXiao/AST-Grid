@@ -1,8 +1,9 @@
-# Adaptive Stagger-Tilted Grid
+# Adaptive Stagger-Tilted Grid for Incompressible Flow Simulation
 
 Implementation of paper **An adaptive staggered-tilted grid for incompressible flow simulation** ([doi](https://dl.acm.org/doi/10.1145/3414685.3417837))
 
-NOTE: This repo only contains 2d implementation and is still under development.
+NOTE: This repo contains smoke simulation using 2d ast and 3d AST-modified octree. **It is still under development.**
+
 
 ## Build
 
@@ -17,10 +18,18 @@ NOTE: This repo only contains 2d implementation and is still under development.
    make -j4
    ```
 
-The above process will generated a shared library under directory *./python*. 
+The above process will generated a shared library under directory *./python*, and example executables under directory *./build/bin*
 
 ## Run
 
-Under the *python* directory, run `jupyter-lab` (requires installation of jupyter and related python packages).
+* 2d ast smoke simulation 
 
-The default **ast_smoke_2d** notebook will run a simple 2d smoke simulation and visualize (and save) the simulation result.
+    Under the *python* directory, run `jupyter-lab` (requires installation of jupyter and related python packages).
+
+    The default **ast_smoke_2d** notebook will run a simple 2d smoke simulation and visualize (and save) the simulation result.
+
+* 3d AST-modified octree simulation
+
+    ```
+    ./bin/octreeSmoke3D
+    ```
