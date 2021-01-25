@@ -40,15 +40,15 @@ namespace Geometry {
 		ssize_t k1,
 		CellCenteredScalarGrid3Ptr sdf,
 		CellCenteredFlagGrid3Ptr closestTri) {
-		if (closestTri->get(i1, j1, k1) != std::numeric_limits<size_t>::max()) {
-			size_t t = closestTri->get(i1, j1, k1);
+		if (closestTri->get(Size3(i1, j1, k1)) != std::numeric_limits<size_t>::max()) {
+			size_t t = closestTri->get(Size3(i1, j1, k1));
 			Triangle3 tri = mesh.triangle(t);
 
 			double d = tri.closestDistance(gx);
 
-			if (d < sdf->get(i0, j0, k0)) {
-				sdf->get(i0, j0, k0) = d;
-				closestTri->get(i0, j0, k0) = closestTri->get(i1, j1, k1);
+			if (d < sdf->get(Size3(i0, j0, k0))) {
+				sdf->get(Size3(i0, j0, k0)) = d;
+				closestTri->get(Size3(i0, j0, k0)) = closestTri->get(Size3(i1, j1, k1));
 			}
 		}
 	}
@@ -276,9 +276,9 @@ namespace Geometry {
 						//Vector3f gx = gridPos(i, j, k);
 						Vector3f gx = Vector3f(i * h, j * h, k * h);
 						double d = tri.closestDistance(gx);
-						if (d < sdf->get(i, j, k)) {
-							sdf->get(i, j, k) = d;
-							closestTri->set(i, j, k, t);
+						if (d < sdf->get(Size3(i, j, k))) {
+							sdf->get(Size3(i, j, k)) = d;
+							closestTri->set(Size3(i, j, k), t);
 						}
 					}
 				}
@@ -309,10 +309,10 @@ namespace Geometry {
 						if (iInterval < 0) {
 							// we enlarge the first interval to include everything
 							// to the -x direction
-							++intersectionCount ->get(0, j, k);
+							++intersectionCount ->get(Size3(0, j, k));
 						}
 						else if (iInterval < static_cast<int>(size.x())) {
-							++intersectionCount->get(iInterval, j, k);
+							++intersectionCount->get(Size3(iInterval, j, k));
 						}
 						// we ignore intersections that are beyond the +x side of
 						// the grid
@@ -347,11 +347,11 @@ namespace Geometry {
 			for (size_t j = 0; j < size.y(); ++j) {
 				unsigned int totalCount = 0U;
 				for (size_t i = 0; i < size.x(); ++i) {
-					totalCount += intersectionCount->get(i, j, k);
+					totalCount += intersectionCount->get(Size3(i, j, k));
 					// if parity of intersections so far is odd,
 					if (totalCount % 2 == 1) {
 						// we are inside the mesh
-						sdf->get(i, j, k) = -sdf->get(i, j, k);
+						sdf->get(Size3(i, j, k)) = -sdf->get(Size3(i, j, k));
 					}
 				}
 			}

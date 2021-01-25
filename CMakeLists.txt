@@ -38,7 +38,6 @@ INCLUDE_DIRECTORIES(
 
 # imgui
 # add_subdirectory(3rdparty/imgui)
-# add_subdirectory(3rdparty/spdlog)
 
 if (CUDA_SOLVER)
     add_subdirectory(cuda)
@@ -53,7 +52,7 @@ add_compile_definitions(GLOBALBENCHMARK)
 # target_compile_definitions(${PROJECT_NAME} PUBLIC -DGLOBALBENCHMARK)
 
 add_subdirectory(src)
-# add_subdirectory(src/geometry)
+add_subdirectory(src/geometry)
 # add_subdirectory(example/smoke2D)
 # add_subdirectory(example/smoke_pipe_2d)
 # add_subdirectory(example/karman_2d)
@@ -65,7 +64,7 @@ add_subdirectory(src)
 # add_subdirectory(example/gumball_smoke_3d)
 # add_subdirectory(example/neighbor_selection)
 # add_subdirectory(example/octree_smoke_2d)
-# add_subdirectory(example/octree_smoke_3d)
+add_subdirectory(example/octree_smoke_3d)
 # add_subdirectory(example/octree_2_layer_smoke_3d)
 # add_subdirectory(example/pure_octree_smoke_3d)
 # add_subdirectory(example/viscous_fluid)

@@ -12,7 +12,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 file(GLOB sources
         ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer/*.cpp
-        # ${CMAKE_CURRENT_SOURCE_DIR}/jet/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/jet/*.cpp
 )
 
 add_library(${target} ${sources})
@@ -71,7 +71,7 @@ endif()
 
 target_link_libraries(${target}
         # imgui
-        # geometry
+        geometry
         # ${GLFW_LIBRARY}
         # ${OPENGL_LIBRARIES}
         # ${GLEW_LIBRARIES}

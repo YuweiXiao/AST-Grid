@@ -1,6 +1,6 @@
 #pragma once
 #include "geometry/triangle_mesh3.h"
-#include "cell_centered_grid3.h"
+#include "cell_centered_grid.h"
 #include "general.h"
 
 namespace Omni {

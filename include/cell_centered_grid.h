@@ -33,6 +33,10 @@ public:
     }
 
     // Sample value based on real position
+    T sample(Real x, Real y, Real z) const { 
+        if constexpr(d == 2) return sample(PosT(x, y)); 
+        else return sample(PosT(x, y, z));
+    }
     T sample(const PosT& pos) const { 
         PosT rp = pos/dx - PosT::Ones()*0.5, f;
         IndexT idx;
@@ -51,13 +55,24 @@ public:
 
     // Return real position given the index
     PosT position(const IndexT& coor) const { return (coor.template cast<REAL>() + PosT::Ones() * 0.5) * dx; }
+    PosT position(int x, int y, int z) const { 
+        if constexpr(d == 2) return position(IndexT(x, y));
+        else return position(IndexT(x, y, z));
+    }
+
 
     T& get(const IndexT& coor) {return data[index(coor)];}
     const T& get(const IndexT& coor) const { return data[index(coor)]; }
-
-    // T& get(int x, int y) { return data[index(IndexT(x, y))]; }
-    // const T& get(int x, int y) const { return data[index(IndexT(x, y))]; }
+    const T& get(int x, int y, int z) const {
+        if constexpr(d==2) return get(IndexT(x, y));
+        else return get(IndexT(x, y, z));
+    }
+    
     void set(const IndexT& coor, const T& value) { data[index(coor)] = value; }
+    void set(int x, int y, int z, const T& value) { 
+        if constexpr (d == 2) set(IndexT(x, y), value);
+        else set(IndexT(x, y, z), value);
+    }
     void fill(const T& v) { std::fill(data.begin(), data.end(), v); }
     const IndexT& resolution() const { return res; }
     REAL gridSpacing() const { return dx; }
@@ -90,4 +105,10 @@ typedef std::shared_ptr<CellCenteredFlagGrid2> CellCenteredFlagGrid2Ptr;
 typedef CellCenteredGrid<Vector2f, 2> CellCenteredVector2Grid2;
 typedef std::shared_ptr<CellCenteredVector2Grid2> CellCenteredVector2Grid2Ptr;
 
+typedef CellCenteredGrid<REAL, 3> CellCenteredScalarGrid3;
+typedef std::shared_ptr<CellCenteredScalarGrid3> CellCenteredScalarGrid3Ptr;
+typedef CellCenteredGrid<char, 3> CellCenteredCharGrid3;
+typedef std::shared_ptr<CellCenteredCharGrid3> CellCenteredCharGrid3Ptr;
+typedef CellCenteredGrid<int, 3> CellCenteredFlagGrid3;
+typedef std::shared_ptr<CellCenteredFlagGrid3> CellCenteredFlagGrid3Ptr;
 } // end namespace Omni
