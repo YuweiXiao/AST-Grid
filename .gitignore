@@ -1,0 +1,7 @@
+build
+.vscode
+
+python/*.so
+python/output_*
+__pycache__
+.ipynb_checkpoints
