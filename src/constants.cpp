@@ -256,42 +256,6 @@ void Constants::init() {
     }}}}}}}
 
 
-
-    // print out for debug purpose
-    // for(int x = 0; x <= 1; ++x) {
-    // for(int y = 0; y <= 1; ++y) {
-    // for(int z = 0; z <= 1; ++z) {
-    // for(int n0 = 0; n0 <= 1; ++n0) {
-    // for(int n1 = 0; n1 <= 1; ++n1) {
-    // for(int n2 = 0; n2 <= 1; ++n2) {
-    // for(int n3 = 0; n3 <= 1; ++n3) {
-    //     std::cout<<x<<' '<<y<<' '<<z<<' '<<n0<<' '<<n1<<' '<<n2<<' '<<n3<<std::endl;
-    //     for(int i = 0; i < 3; ++i) {
-    //         for(int j = 0; j < 7; ++j) {
-    //             std::cout<<Constants::OCTREE_OMNI_DUAL_GRAPH_MATRIX3[x][y][z][n0][n1][n2][n3][i][j]<<' ';
-    //         }
-    //         std::cout<<std::endl;
-    //     }
-    //     std::cout<<std::endl;
-    // }}}}}}}
-
-
-    // for(int x = 0; x <= 1; ++x) {
-    //     for(int y = 0; y <= 1; ++y) {
-    //         for(int n0 = 0; n0 <= 1; ++n0) {
-    //             for(int n1 = 0; n1 <= 1; ++n1) {
-    //                 std::cout<<x<<' '<<y<<' '<<n0<<' '<<n1<<" :"<<std::endl;
-    //                 for(int i = 0; i < 2; ++i) {
-    //                     for(int k = 0; k < 4; ++k) {
-    //                         std::cout<<Constants::OMNI_DUAL_GRAPH_MATRIX2[x][y][n0][n1][i][k]<<' ';
-    //                     }
-    //                     std::cout<<std::endl;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
     for(int i = 0; i < 8; ++i) {
         REAL x_sign = (i==0||i==3||i==4||i==7?1:-1);
         REAL y_sign = (i==0||i==1||i==4||i==5?1:-1);
@@ -304,9 +268,5 @@ void Constants::init() {
         Constants::TILT_PRINCIPLE_AXIS[i].col(0) = axis.normalized();
         Constants::TILT_PRINCIPLE_AXIS[i].col(1) = axis_1.normalized();
         Constants::TILT_PRINCIPLE_AXIS[i].col(2) = axis_2.normalized();
-
-        // spdlog::info("--------------------");
-        // spdlog::info("{}", Constants::TILT_PRINCIPLE_AXIS[i]);
-        // spdlog::info("{}", Constants::TILT_PRINCIPLE_AXIS[i] * Constants::TILT_PRINCIPLE_AXIS[i].transpose());
     }
 }

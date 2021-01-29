@@ -249,36 +249,6 @@ void OctreeOmniGridSolver3::onUpdate(REAL timeStep) {
 }
 
 
-// void OctreeOmniGridSolver3::addForce(REAL dt) {
-//     BENCHMARK_SCOPED_TIMER_SECTION t("add force");
-//     auto& tMACGrid = velocity->getMACGrid();
-//     auto& tTiltGrid = velocity->getTiltGrid();
-//     auto& forceMACGrid = force->getMACGrid();
-//     auto& forceTiltGrid = force->getTiltGrid();
-  
-//     for(int axis = 0; axis < 3; ++axis) {
-//         ThreadPool::parallelIterateGrid(tMACGrid->getParallelIteratorVec(), [&](const OctreeGridIterator3& iter){
-//             REAL newV = tMACGrid->get(axis, iter.levelCoor()) + dt * forceMACGrid->get(axis, iter.levelCoor());
-//             tMACGrid->set(axis, iter.levelCoor(), newV);
-//         });
-//     }
-
-//     ThreadPool::parallelIterateGrid(tTiltGrid->getParallelIteratorVec(), [&](const OctreeGridIterator3& iter){
-//         if(!tiltE->get(iter.levelCoor()).is_closed) {
-//             Vector8f nV = tTiltGrid->get(iter.levelCoor()) + dt * forceTiltGrid->get(iter.levelCoor());
-//             tTiltGrid->set(iter.levelCoor(), nV);
-//         }
-//     });
-
-//     // just set all face, no need to care half-tilt direction
-
-//     parallel_iterate_half_tilt(layout, [&](LCOOR_T lCoor) {
-//         Vector8f nV = tTiltGrid->get(lCoor) + dt * forceTiltGrid->get(lCoor);
-//         tTiltGrid->set(lCoor, nV);
-//     });
-// }
-
-
 int OctreeOmniGridSolver3::updateIndex() {
     int cIdx = 0;
     static REAL threshold = 3;
@@ -717,34 +687,6 @@ void OctreeOmniGridSolver3::updateVelocityByPressure(const VectorXd& p, REAL dt)
     auto& tMACGrid = velocity->getMACGrid();
     auto& tTiltGrid = velocity->getTiltGrid();
 
-    // REAL maxP = -1;
-    // iterate_grid(iter, pressure->getOctagonGrid()) {
-    //     int idx = pIndex->getOctagon(iter.levelCoor());
-    //     if(idx >= 0) {
-    //         pressure->setOctagon(iter.levelCoor(), p[idx]);
-    //         maxP = std::max(maxP, p[idx]);
-    //     }
-    // }
-    // spdlog::info("current maxP: {}", maxP);
-    // pressure->updateGhost();
-    // static int index = 0;
-    // Viewer::grid2PNGImage("./"+name+"/pressure/p_sample_"+paddingStr(std::to_string(index), '0', 4)+".png", 
-    //     Size2(resolution.x(), resolution.z()) * 2, [&](int xIdx, int zIdx)->REAL{
-    //         Vector3f pos = Vector3f(xIdx * delta_h / 2.0, 0.5, zIdx * delta_h / 2.0);
-    //         return std::min(std::max(pressure->sample(pos) * 10, 0.0), 1.0);
-    // });
-    // ++index;
-
-    // for(int i = 0; i < getLevelSet()->resolution().z(); ++i) {
-    //     Viewer::grid2PNGImage("./"+name+"/levelset_debug/l_"+paddingStr(std::to_string(i), '0', 4)+".png", 
-    //         Size2(resolution.x(), resolution.y()) * 2, [&](int xIdx, int yIdx)->REAL{
-    //             Vector3f pos = Vector3f(xIdx * delta_h / 2.0, yIdx * delta_h / 2.0, i * delta_h / 2.0);
-    //             return std::min(std::max(fabs(getLevelSet()->sample(pos)) * 10, 0.0), 1.0);
-    //     });
-    // }
-    // spdlog::info(getLevelSet()->sample(Vector3f(0, 0, 38 * delta_h / 2.0), true));
-    // spdlog::info(getLevelSet()->sample(Vector3f(0.3, 0.3, 38 * delta_h / 2.0), true));
-
     ThreadPool::parallelIterateGrid(tMACGrid->getParallelIteratorVec(), [&](const OctreeGridIterator3& iter) {
     // ThreadPool::parallelIterateGrid(tMACGrid->getIterator(), TaskManager::tf.num_workers() * 4, [&](const OctreeGridIterator3& iter) {
         auto delta_h = layout->levelGridSpacing(iter.level);
@@ -1068,46 +1010,6 @@ void OctreeOmniGridSolver3::saveResult(int index) {
 		delete copy_density;
         aCounter.decrease();
 	});
-
-    // pressure->updateGhost();
-    // Viewer::grid2PNGImage("./"+name+"/pressure_sample_"+paddingStr(std::to_string(index), '0', 4)+".png", 
-    //     Size2(resolution.x(), resolution.z()) * scale, [&](int xIdx, int zIdx)->REAL{
-    //         Vector3f pos = Vector3f(xIdx, yIdx * scale, zIdx) * delta_h / (REAL)scale;
-    //         return std::min(std::max(pressure->sample(pos) * 10, 0.0), 1.0);
-    // });
-    // Viewer::grid2PNGImage("./"+name+"/density_"+paddingStr(std::to_string(index), '0', 4)+".png", 
-    //     Size2(resolution.x(), resolution.z()*2), [&](int xIdx, int zIdx)->REAL{
-    //         int c0 = layout->getUntil(0, xIdx, yIdx, zIdx>>1, false);
-    //         REAL v = 0;
-    //         if(c0 >= 0) {
-    //             if(zIdx&1)
-    //                 v = density->getOctagon(c0);
-    //             else
-    //                 v = density->getTilt(c0);
-    //         } 
-    //         return std::min(std::max(v, 0.0), 1.0);
-    // });
-    // velocity->updateGhost();
-    // velocity->updateDualGrid();
-    // velocity->getDualGrid()->updateGhost();
-    // Viewer::grid2PNGImage("./"+name+"/velocity_"+paddingStr(std::to_string(index), '0', 4)+".png", 
-    //     Size2(resolution.x(), resolution.z()*2), [&](int xIdx, int zIdx)->REAL{
-    //         int c0 = layout->getUntil(0, xIdx, yIdx, zIdx>>1, false);
-    //         REAL v = 0;
-    //         if(c0 >= 0) {
-    //             if(zIdx&1)
-    //                 v = velocity->getDualGrid()->getOctagon(c0).norm();
-    //             else
-    //                 v = velocity->getDualGrid()->getTilt(c0).norm();
-    //         } 
-    //         return std::min(std::max(v*4, 0.0), 1.0);
-    // });
-    // Viewer::grid2PNGImage("./"+name+"/velocity_sample_"+paddingStr(std::to_string(index), '0', 4)+".png", 
-    //    Size2(resolution.x(), resolution.z()) * scale, [&](int xIdx, int zIdx)->REAL{
-    //        Vector3f pos = Vector3f(xIdx, yIdx * scale, zIdx) * delta_h / (REAL)scale;
-    //        REAL v = velocity->sample(pos).norm();
-    //        return std::min(std::max(v * 4, 0.0), 1.0);
-    // });
 }
 
 bool Omni::OctreeOmniGridSolver3::restart(int frame, const string & layoutfile, const string & boundaryfile, const string & tiltfile, const string & densityfile, const string & heatfile, const string & velocityfile)

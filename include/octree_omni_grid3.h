@@ -136,15 +136,10 @@ void OctreeOmniGrid3<int>::updateGhost();
 template<class T>
 void OctreeOmniGrid3<T>::updateGhost() {
     BENCHMARK_SCOPED_TIMER_SECTION t("omni grid,update ghost cell");
-    // Timer tt;
     cellPtr->updateGhost(); // half correct, need updateCellGhost to correct it.
-    // spdlog::info("1. {}", tt.durationInSeconds()); tt.reset();
     update_ghost_exclude_half_tilt(T, vertexPtr);
-    // spdlog::info("2. {}", tt.durationInSeconds()); tt.reset();
     updateCellGhost();
-    // spdlog::info("3. {}", tt.durationInSeconds()); tt.reset();
     interpolateClosedJoint();
-    // spdlog::info("4. {}", tt.durationInSeconds()); tt.reset();
 }
 
 // always construct a cube to do trilinear interpolation
@@ -263,10 +258,7 @@ T OctreeOmniGrid3<T>::sampleSub(Real x_pos, Real y_pos, Real z_pos) const {
     Size3 idx(xIdx, yIdx, zIdx);
     Size3 tiltIdx = idx + OCT_NB_TILT_DXDYDZ[region3D];
     const auto& tNode = getTiltEGridPtr()->get(level, tiltIdx.x(), tiltIdx.y(), tiltIdx.z());
-    // DEBUG_ONLY(if(debug) {
-    //     spdlog::info("level:{}, idx:{}, region:{}, fx,fy,fz:{}, {}, {}, tiltIdx:{}", level, idx.transpose(), region3D, fx, fy, fz, tiltIdx.transpose());
-    //     spdlog::info("T_joint:{}, closed:{}, half_tilt:{}, is_closed_by_T_joint:{}, dir:{}", tNode.is_T_joint, tNode.is_closed, tNode.is_half_tilt, tNode.is_closed_by_T_joint, int(tNode.half_direction));
-    // });
+
     if(!tNode.is_half_tilt && !tNode.is_closed_by_T_joint) {
         if(tNode.is_closed) {
             return cellPtr->sampleGivenRelativePosition(level, rx, ry, rz);
@@ -289,10 +281,6 @@ T OctreeOmniGrid3<T>::sampleSub(Real x_pos, Real y_pos, Real z_pos) const {
     }
     fx *= 2; fy *= 2; fz *= 2;
     ASSERT(fx<=1 && fy <= 1 && fz <= 1, "error fx,fy,fz");
-    // DEBUG_ONLY(if(debug) {
-    //     spdlog::info("idx:{}, region:{}, fx,fy,fz:{}, {}, {}, tiltIdx:{}", idx.transpose(), region3D, fx, fy, fz, tiltIdx.transpose());
-    //     spdlog::info("{}, {}, {}, {}, {}, {}, {}, {}", v[0], v[1],v[2],v[3],v[4],v[5],v[6],v[7]);
-    // });
 
     return trilerp(v[6], v[7], v[5], v[4], v[2], v[3], v[1], v[0], fx, fy, fz);
 }
@@ -317,7 +305,6 @@ void OctreeOmniGrid3<T>::updateCellGhost() {
 
 template<class T>
 void OctreeOmniGrid3<T>::interpolateClosedJoint() {
-    // Timer tt;
     ThreadPool::parallelForTF(0, (int)layout->getTJointArr().size(), [&](int idx){
         LCOOR_T lCoor = layout->getTJointArr()[idx];
         const auto& tiltENode = getTiltEGridPtr()->get(lCoor);
@@ -336,7 +323,6 @@ void OctreeOmniGrid3<T>::interpolateClosedJoint() {
             }
         }
     });
-    // spdlog::info("\t1.{}", tt.durationInSeconds()); tt.reset();
 
     // interplocate tilt closed by half-tilt
     ThreadPool::parallelForTF(0, (int)layout->getclosedByHalfTiltArr().size(), [&](int idx){
@@ -348,7 +334,6 @@ void OctreeOmniGrid3<T>::interpolateClosedJoint() {
             ASSERT(false, "what???");
         }
     });
-    // spdlog::info("\t2.{}", tt.durationInSeconds()); tt.reset();
 }
 
 

@@ -112,11 +112,6 @@ T OctreeCellCenteredGrid3<T>::sample(REAL x_pos, REAL y_pos, REAL z_pos) const {
     int yIdx1 = std::min(yIdx+1, cRes.y()-2);
     int zIdx1 = std::min(zIdx+1, cRes.z()-2);
 
-    // DEBUG_ONLY(if(debug) {
-    //     spdlog::info("idx:{} {} {}, fx fy fz: {} {} {}, value: {}, {}, {}, {}, {}, {}, {}, {}", xIdx, yIdx, zIdx, fx, fy, fz,
-    //         get(level, xIdx, yIdx, zIdx), get(level, xIdx1, yIdx, zIdx), get(level, xIdx, yIdx1, zIdx), get(level, xIdx1, yIdx1, zIdx),
-    //         get(level, xIdx, yIdx, zIdx1), get(level, xIdx1, yIdx, zIdx1), get(level, xIdx, yIdx1, zIdx1), get(level, xIdx1, yIdx1, zIdx1));
-    // });
     return trilerp(get(level, xIdx, yIdx, zIdx),
                     get(level, xIdx1, yIdx, zIdx),
                     get(level, xIdx, yIdx1, zIdx),
@@ -172,12 +167,6 @@ T OctreeCellCenteredGrid3<T>::sampleGivenRelativePosition(int level, REAL rx, RE
     int xIdx1 = std::min(xIdx+1, cRes.x()-2);
     int yIdx1 = std::min(yIdx+1, cRes.y()-2);
     int zIdx1 = std::min(zIdx+1, cRes.z()-2);
-
-    // DEBUG_ONLY(if(debug) {
-    //     spdlog::info("idx:{} {} {}, fx fy fz: {} {} {}, value: {}, {}, {}, {}, {}, {}, {}, {}", xIdx, yIdx, zIdx, fx, fy, fz,
-    //         get(level, xIdx, yIdx, zIdx), get(level, xIdx1, yIdx, zIdx), get(level, xIdx, yIdx1, zIdx), get(level, xIdx1, yIdx1, zIdx),
-    //         get(level, xIdx, yIdx, zIdx1), get(level, xIdx1, yIdx, zIdx1), get(level, xIdx, yIdx1, zIdx1), get(level, xIdx1, yIdx1, zIdx1));
-    // });
 
     return trilerp(get(level, xIdx, yIdx, zIdx, def),
                     get(level, xIdx1, yIdx, zIdx, def),

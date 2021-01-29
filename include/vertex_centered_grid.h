@@ -37,11 +37,6 @@ public:
         
         getBaryCentric(pos / dx, res, idx, f);
 
-        // getBarycentric(rx, 0, resolution().x(), &xIdx, &fx);
-        // getBarycentric(ry, 0, resolution().y(), &yIdx, &fy);
-
-        // int xIdx1 = std::min(xIdx+1, resolution().x());
-        // int yIdx1 = std::min(yIdx+1, resolution().y());
         IndexT idx1 = (idx + IndexT::Ones()).cwiseMin(res);
 
         if constexpr(d == 2) {
@@ -53,15 +48,10 @@ public:
         }
     }
 
-    // PosT position(int xIdx, int yIdx) const { return PosT(xIdx, yIdx) * gridSpacing(); }
     PosT position(const IndexT& coor) const { return coor.template cast<REAL>() * dx; }
-    // T& get(int xIdx, int yIdx) { return data[index(xIdx, yIdx)]; }
-    // const T& get(int xIdx, int yIdx) const { return data[index(xIdx, yIdx)]; }
     T& get(const IndexT& coor) { return data[index(coor)];}
     const T& get(const IndexT& coor) const { return data[index(coor)];}
     void set(const IndexT& coor, const T& value) { data[index(coor)] = value; }
-    // void set(const IndexT& idx, const T& value) { data[index(idx.x(), idx.y())] = value; }
-    // bool isValid(int xIdx, int yIdx) const {return Valid(IndexT(xIdx, yIdx), realRes);}
     bool isValid(const IndexT& idx) const {return Valid(idx, resPlusOne);}
     const IndexT& resolution() const { return res; }
     REAL gridSpacing() const { return dx; }

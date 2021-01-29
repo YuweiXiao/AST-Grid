@@ -150,9 +150,6 @@ void getNeighborCubeValue(int level, int xIdx, int yIdx, int zIdx, int dir, T* v
 						tiltE->get(level-1, idx.x(), idx.y(), idx.z()).is_half_tilt) {
 						v[i] = vertexPtr->get(level-1, idx.x(), idx.y(), idx.z());
 						flag = true;
-						// DEBUG_ONLY(if(debug) {
-						// 	spdlog::info("\t{}: face node get directly from: {}:{} {} {}, v:{}", i, level-1, idx.x(), idx.y(), idx.z(), v[i]);
-						// });
 					}
 				}
 				if(markerXYZ[k] == 0 && markerXYZ[(k+1)%3] != 0 && markerXYZ[(k+2)%3] != 0) {	// edge node
@@ -164,9 +161,6 @@ void getNeighborCubeValue(int level, int xIdx, int yIdx, int zIdx, int dir, T* v
 						if(tNode.is_closed_by_T_joint) {
 							v[i] = vertexPtr->get(level-1, tIdx.x(), tIdx.y(), tIdx.z());
 							flag = true;
-							// DEBUG_ONLY(if(debug) {
-							// 	spdlog::info("\t{}: edge node get directly from: {}:{} {} {}, v:{}", i, level-1, tIdx.x(), tIdx.y(), tIdx.z(), v[i]);
-							// });
 						}
 					}
 				}
@@ -183,9 +177,6 @@ void getNeighborCubeValue(int level, int xIdx, int yIdx, int zIdx, int dir, T* v
 			if(x == 0 && y == 0 && z == 0)
 				continue;
 			LCOOR_T c = cellPtr->clamp(level, xIdx+x, yIdx+y, zIdx+z);
-			// DEBUG_ONLY(if(debug) {
-			// 	spdlog::info("\t{}: {}, {}, {}, clamped:{}, {}, {}, {}", i, xIdx+x, yIdx+y, zIdx+z, UNPACK_LEVEL3(c), UNPACK_X3(c), UNPACK_Y3(c), UNPACK_Z3(c));
-			// });
 			tv += cellPtr->get(c);
 			count += 1;
 		}}}

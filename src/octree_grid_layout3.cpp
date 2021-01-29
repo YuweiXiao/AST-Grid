@@ -7,16 +7,9 @@ using namespace Omni;
 OctreeGridLayout3::OctreeGridLayout3(const Size3& res, REAL spacing, int tLevel, CellCenteredFlagGrid3Ptr splitMap, bool singleLayer) 
     : Grid3(res, spacing), totalLevel(tLevel), isSingleLayer(singleLayer), layers(tLevel), halfGhostIdx(0), TJointIdxArr(0), closedByHalfTiltArr(0)
 {   
-    // auto source = TaskManager::tf.placeholder();
-	// auto target = TaskManager::tf.placeholder();
     for(int i = 0; i < totalLevel; ++i) {
-        // auto task = TaskManager::tf.silent_emplace([&, i](){
-            layers[i] = std::make_shared<OctreeLayer3>(res, spacing, i, splitMap, singleLayer);
-        // });
-        // source.precede(task);
-		// task.precede(target);
+        layers[i] = std::make_shared<OctreeLayer3>(res, spacing, i, splitMap, singleLayer);
     }
-    // TaskManager::tf.wait_for_all();
 }
 
 

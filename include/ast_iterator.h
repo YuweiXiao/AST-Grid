@@ -5,40 +5,6 @@
 
 namespace ast {
 
-// template<int d>
-// class ASTIterator {
-//     using T_Index = typename Eigen::Matrix<int, d, 1>;
-// public:
-//     ASTIterator(const T_Index& res) {
-//         box_iters.reserve(5);
-//         box_iters.push_back(BoxIterator<d>(T_Index::Zero(), res-T_Index::Ones()));
-//         box_iters.push_back(BoxIterator<d>(T_Index::Zero(), res));
-//         for(int i = 0; i < d; ++i) {
-//             T_Index up = res-T_Index::Ones();
-//             up[i] += 1;
-//             box_iters.push_back(BoxIterator<d>(T_Index::Zero(), up));
-//         }
-//         reset(); 
-//     }
-//     void next() {
-//         box_iters[k].next();
-//         if(!box_iters[k].valid()) k += 1;
-//     }
-//     bool valid() const { return k < box_iters.size(); }
-//     const T_Index& index() const { return box_iters[k].index(); }
-//     node_type type() const { return k; }
-
-//     void reset() {
-//         k = 0;
-//         for(auto& iter: box_iters) iter.reset();
-//     }
-
-// private:
-//     int k = 0;
-//     std::vector<BoxIterator<d>> box_iters;
-
-// };
-
 template<bool parallel=false, int d, typename Func>
 inline void iterateCellCentered(const Eigen::Matrix<int, d, 1>& res, const Func& func) {
     using IndexT = Eigen::Matrix<int, d, 1>;
